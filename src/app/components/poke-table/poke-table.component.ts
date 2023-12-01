@@ -9,12 +9,11 @@ import { PokemonService } from 'src/app/services/pokemon.service';
   styleUrls: ['./poke-table.component.scss']
 })
 export class PokeTableComponent implements OnInit {
-  //Se crea las columnas de la tabla
   displayedColumns: string[] = ['position', 'image', 'name'];
   data: any[] = [];
-  datasource = new MatTableDataSource<any>(this.data);
+  dataSource = new MatTableDataSource<any>(this.data);
   pokemons = [];
-  //paginador
+
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | undefined;
 
   constructor(private PokeService: PokemonService) { }
@@ -23,20 +22,33 @@ export class PokeTableComponent implements OnInit {
     this.getPokemons();
   }
 
-  getPokemons(){
-    let pokemonData;
-    
-    for(let i = 1; i <= 150; i++ ){
-        this.PokeService.getPokemons(i).subscribe(
-          res => {
-            console.log(res);
-          },
-          err=>{
-    
-          }
-        );
-      }
+  getPokemons() {
+    for (let i = 1; i <= 150; i++) {
+      this.PokeService.getPokemons(i).subscribe(
+        res => {
+          const pokemonData = {  // Corregido aquí
+            position: i,
+            image: res.sprites.front_default,
+            name: res.name
+          };
+          this.data.push(pokemonData);
+          this.dataSource = new MatTableDataSource<any>(this.data);
+          this.dataSource.paginator = this.paginator as MatPaginator;  // Corregido aquí
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    }
+  }
 
-      }
-      
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
 }
+
