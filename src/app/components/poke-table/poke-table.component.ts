@@ -9,14 +9,14 @@ import { PokemonService } from 'src/app/services/pokemon.service';
   styleUrls: ['./poke-table.component.scss']
 })
 export class PokeTableComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'image', 'name'];
+  displayedColumns: any[] = ['position', 'image', 'name'];
   data: any[] = [];
   dataSource = new MatTableDataSource<any>(this.data);
   pokemons = [];
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | undefined;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator | undefined;
 
-  constructor(private PokeService: PokemonService) { }
+  constructor(private pokeService: PokemonService) { } // Corregido aquí
 
   ngOnInit(): void {
     this.getPokemons();
@@ -24,16 +24,16 @@ export class PokeTableComponent implements OnInit {
 
   getPokemons() {
     for (let i = 1; i <= 150; i++) {
-      this.PokeService.getPokemons(i).subscribe(
+      this.pokeService.getPokemons(i).subscribe(
         res => {
-          const pokemonData = {  // Corregido aquí
+          const pokemonData = {
             position: i,
             image: res.sprites.front_default,
             name: res.name
           };
           this.data.push(pokemonData);
-          this.dataSource = new MatTableDataSource<any>(this.data);
-          this.dataSource.paginator = this.paginator as MatPaginator;  // Corregido aquí
+          this.dataSource.data = this.data; // Corregido aquí
+          this.dataSource.paginator = this.paginator as MatPaginator;
         },
         err => {
           console.log(err);
@@ -51,4 +51,3 @@ export class PokeTableComponent implements OnInit {
     }
   }
 }
-
