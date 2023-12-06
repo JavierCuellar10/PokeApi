@@ -1,1 +1,19 @@
-<p>poke-detail works!</p>
+<mat-card class="card">
+
+    <mat-card-header>
+      <img mat-card-avatar class="header-image" src="{{pokemonImg}}">
+      <mat-card-title>{{pokemon.name}}</mat-card-title>
+      <mat-card-subtitle>N° {{pokemon.id}}</mat-card-subtitle>
+    </mat-card-header>
+
+    <img mat-card-image src="{{pokemonImg}}" alt="Pokemon">
+    <mat-card-content>
+      <mat-chip-list aria-label="Fish selection">
+        <mat-chip color="accent" selected>Type: {{pokemonType}}</mat-chip>
+        <mat-chip color="accent" selected>Heigth: {{pokemon.height}}</mat-chip>
+        <mat-chip color="accent" selected>Weigth: {{pokemon.weight}}</mat-chip>
+      </mat-chip-list>
+
+    </mat-card-content>
+   
+  </mat-card>
