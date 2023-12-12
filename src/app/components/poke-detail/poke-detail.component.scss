@@ -16,3 +16,15 @@
     border-radius: 10px;
 }
 
+.mat-card-tittle{
+    text-transform: uppercase;
+    color: black;
+}
+
+.mat-card-subtitle{
+    color: $black;
+}
+
+.mat-chip{
+    background-color: $black !important;
+}
